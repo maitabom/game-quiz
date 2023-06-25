@@ -9,7 +9,18 @@
 
 export default {
   name: 'App',
- 
+  data() {
+    return {
+      endpoint: "https://opentdb.com/api.php?amount=10&category=18"
+    }
+  },
+  created() {
+    this.axios
+        .get(this.endpoint)
+        .then(response => {
+      console.log(response.data)
+    })
+  }
 }
 </script>
 
