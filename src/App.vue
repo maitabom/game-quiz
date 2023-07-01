@@ -1,7 +1,15 @@
 <template>
-  <div>
-    <h1 v-html="this.question"></h1>
-  </div>
+  <template v-if="this.answers">
+    <div>
+      <h1 v-html="this.question"></h1>
+    </div>
+
+    <template v-for="answer in this.answers" :key="answer">
+      <input type="radio" name="option" id="option" :value="answer" v-model="this.chosenAnswer">
+      <label for="option" v-html="answer"></label><br>
+    </template>
+    <button @click="this.submitAnswer" type="button" class="send">Enviar</button>
+  </template>
 </template>
 
 <script>
@@ -14,6 +22,7 @@ export default {
       question: undefined,
       incorrectAnswers: undefined,
       correctAnswer: undefined,
+      chosenAnswer: undefined
     }
   },
   computed: {
@@ -22,6 +31,19 @@ export default {
       answers.splice(Math.round(Math.random() * answers.length), 0, this.correctAnswer);
 
       return answers;
+    }
+  },
+  methods: {
+    submitAnswer() {
+      if (this.chosenAnswer == undefined) {
+        alert("Pick on of the options");
+      } else {
+        if (this.chosenAnswer == this.correctAnswer) {
+          alert("You got it right!");
+        } else {
+          alert("You got it wrong!");
+        }
+      }
     }
   },
   created() {
