@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h1>Quiz</h1>
+    <h1 v-html="this.question"></h1>
   </div>
-  
 </template>
 
 <script>
@@ -11,15 +10,28 @@ export default {
   name: 'App',
   data() {
     return {
-      endpoint: "https://opentdb.com/api.php?amount=10&category=18"
+      endpoint: "https://opentdb.com/api.php?amount=10&category=18",
+      question: undefined,
+      incorrectAnswers: undefined,
+      correctAnswer: undefined,
+    }
+  },
+  computed: {
+    answers() {
+      var answers = JSON.parse(JSON.stringify(this.incorrectAnswers));
+      answers.splice(Math.round(Math.random() * answers.length), 0, this.correctAnswer);
+
+      return answers;
     }
   },
   created() {
     this.axios
-        .get(this.endpoint)
-        .then(response => {
-      console.log(response.data)
-    })
+      .get(this.endpoint)
+      .then(response => {
+        this.question = response.data.results[0].question;
+        this.incorrectAnswers = response.data.results[0].incorrect_answers;
+        this.correctAnswer = response.data.results[0].correct_answer;
+      })
   }
 }
 </script>
@@ -40,7 +52,7 @@ h1 {
   margin-top: 40px;
 }
 
-input[type='radio']{
+input[type='radio'] {
   margin: 12px 4px;
 }
 
